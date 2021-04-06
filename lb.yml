@@ -1,0 +1,42 @@
+- hosts: 'LOADBALANCERS'
+  tasks:
+          - name: "TO INSTALLING THE HAPROXY"
+            package:
+                    name: "haproxy"
+                    state: present
+
+          - name: "TO UPDATE THE HAPROXY FILE"
+            template:
+                    src: "/etc/haproxy/haproxy.cfg"
+                    dest: "/etc/haproxy/haproxy.cfg"
+
+          - name: "TO START THE HAPROXY SERVICES"
+            service:
+                    name: "haproxy"
+                    state: restarted
+
+
+
+- hosts: 'WEBSERVER'
+  tasks:
+          - name: "INSTALLING HTTPD SOFTWARE"
+            package:
+                  name: "httpd"
+                  state: present
+
+          - name: "COPY THE CONTENT INTO HTTPD DOCUMENT ROOT DIRECTORY"
+            copy:
+                  content: "HELLO EVERYONE SO FINALLY TASK 12.1 IS COMPLETED SUCCESSFULLY"
+                  dest: "/var/www/html/index.html"
+
+          - name: "TO START THE SERVICES OF HTTPD"
+            service:
+                  name: "httpd"
+                  state: started
+
+          - name: "TO ENABLE THE FIREWALL FOR PORT NUMBER 80"
+            firewalld:
+                  port: 80/tcp
+                  state: enabled
+                  permanent: yes
+                  immediate: yes
